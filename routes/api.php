@@ -3,4 +3,4 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QuoteController;
 
-Route::get('/', [QuoteController::class, 'index'])->name('home');
+Route::get('/quote/daily', [QuoteController::class, 'daily']);
