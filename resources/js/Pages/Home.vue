@@ -40,14 +40,25 @@
                 <p class="text-xl text-gray-600">No quote available yet. Add some quotes to the database!</p>
             </div>
 
-            <div class="text-center mt-8 text-gray-500 text-sm">
-                <p>A new quote appears every day</p>
+            <div class="text-center mt-8">
+                <p class="text-gray-500 text-sm mb-4">A new quote appears every day</p>
+                <a
+                    href="/quotes/create"
+                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+                >
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Add New Quote
+                </a>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import { Link } from '@inertiajs/vue3';
+
 defineProps({
     quote: {
         type: Object,

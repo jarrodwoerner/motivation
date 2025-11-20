@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Quote;
+use App\Models\Tag;
 use App\Services\QuoteService;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class QuoteController extends Controller
@@ -34,5 +37,37 @@ class QuoteController extends Controller
             'tags' => $quote?->tags->pluck('name'),
             'date' => now()->toDateString(),
         ]);
+    }
+
+    public function create()
+    {
+        $tags = Tag::orderBy('name')->get();
+
+        return Inertia::render('AddQuote', [
+            'tags' => $tags,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'quote' => 'required|string',
+            'author' => 'required|string|max:255',
+            'source' => 'nullable|string|max:255',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
+        ]);
+
+        $quote = Quote::create([
+            'quote' => $validated['quote'],
+            'author' => $validated['author'],
+            'source' => $validated['source'] ?? null,
+        ]);
+
+        if (!empty($validated['tags'])) {
+            $quote->tags()->attach($validated['tags']);
+        }
+
+        return redirect()->back()->with('success', 'Quote added successfully!');
     }
 }
