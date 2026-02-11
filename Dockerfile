@@ -9,7 +9,7 @@ RUN npm ci
 
 # Copy frontend source files
 COPY resources/ ./resources/
-COPY vite.config.ts ./
+COPY vite.config.js ./
 COPY tsconfig.json ./
 COPY components.json ./
 COPY eslint.config.js ./
