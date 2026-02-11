@@ -14,10 +14,11 @@ COPY tsconfig.json ./
 COPY components.json ./
 COPY eslint.config.js ./
 
-# Install Ziggy vendor package needed by frontend build
+# Install PHP and Composer to fetch Ziggy vendor package needed by frontend build
+RUN apk add --no-cache php83 php83-phar php83-iconv php83-mbstring php83-openssl
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+RUN php83 /usr/bin/composer install --no-dev --no-scripts --no-autoloader --prefer-dist
 
 # Build frontend assets
 RUN npm run build
