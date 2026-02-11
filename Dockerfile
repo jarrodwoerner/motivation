@@ -18,7 +18,7 @@ COPY eslint.config.js ./
 RUN apk add --no-cache php83 php83-phar php83-iconv php83-mbstring php83-openssl
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY composer.json composer.lock ./
-RUN php83 /usr/bin/composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+RUN php83 /usr/bin/composer install --no-dev --no-scripts --no-autoloader --prefer-dist --ignore-platform-reqs
 
 # Build frontend assets
 RUN npm run build
