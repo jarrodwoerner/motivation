@@ -14,11 +14,16 @@ COPY tsconfig.json ./
 COPY components.json ./
 COPY eslint.config.js ./
 
+# Install Ziggy vendor package needed by frontend build
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
+
 # Build frontend assets
 RUN npm run build
 
 # PHP Application Stage
-FROM php:8.2-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 # Install system dependencies and PHP extensions
 RUN apk add --no-cache \
@@ -31,16 +36,9 @@ RUN apk add --no-cache \
     git \
     oniguruma-dev \
     libzip-dev \
-    libpq-dev \
-    icu-dev \
     py3-pip \
     && docker-php-ext-configure gd \
-    && docker-php-ext-configure intl \
-    && docker-php-ext-install pdo pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip opcache intl \
-    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
-    && pecl install redis \
-    && docker-php-ext-enable redis \
-    && apk del .build-deps \
+    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip opcache \
     && pip3 install --no-cache-dir --break-system-packages 'setuptools<81' supervisor==4.2.5
 
 # Install Composer
