@@ -5,31 +5,31 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: imageseer:latest
+    image: motivation:latest
     ports:
       - "${APP_PORT:-80}:80"
     environment:
-      APP_NAME: ${APP_NAME:-ImageSeer}
+      APP_NAME: ${APP_NAME:-motivation}
       APP_ENV: ${APP_ENV:-production}
       APP_KEY: ${APP_KEY}
       APP_DEBUG: ${APP_DEBUG:-false}
       APP_URL: ${APP_URL:-http://localhost}
-      
+
       DB_CONNECTION: ${DB_CONNECTION:-mysql}
       DB_HOST: ${DB_HOST:-db}
       DB_PORT: ${DB_PORT:-3306}
-      DB_DATABASE: ${DB_DATABASE:-imageseer}
-      DB_USERNAME: ${DB_USERNAME:-imageseer}
+      DB_DATABASE: ${DB_DATABASE:-motivation}
+      DB_USERNAME: ${DB_USERNAME:-motivation}
       DB_PASSWORD: ${DB_PASSWORD}
-      
+
       REDIS_HOST: 127.0.0.1
       REDIS_PASSWORD: ${REDIS_PASSWORD:-null}
       REDIS_PORT: 6379
-      
+
       CACHE_DRIVER: ${CACHE_DRIVER:-redis}
       QUEUE_CONNECTION: ${QUEUE_CONNECTION:-redis}
       SESSION_DRIVER: ${SESSION_DRIVER:-redis}
-      
+
       MAIL_MAILER: ${MAIL_MAILER:-smtp}
       MAIL_HOST: ${MAIL_HOST}
       MAIL_PORT: ${MAIL_PORT:-587}
@@ -37,29 +37,29 @@ services:
       MAIL_PASSWORD: ${MAIL_PASSWORD}
       MAIL_ENCRYPTION: ${MAIL_ENCRYPTION:-tls}
       MAIL_FROM_ADDRESS: ${MAIL_FROM_ADDRESS}
-      MAIL_FROM_NAME: "${MAIL_FROM_NAME:-ImageSeer}"
+      MAIL_FROM_NAME: "${MAIL_FROM_NAME:-motivation}"
     volumes:
       - storage:/var/www/html/storage
       - logs:/var/www/html/storage/logs
     depends_on:
       - db
     networks:
-      - imageseer-network
+      - motivation-network
     restart: unless-stopped
 
   db:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
-      MYSQL_DATABASE: ${DB_DATABASE:-imageseer}
-      MYSQL_USER: ${DB_USERNAME:-imageseer}
+      MYSQL_DATABASE: ${DB_DATABASE:-motivation}
+      MYSQL_USER: ${DB_USERNAME:-motivation}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
       - db-data:/var/lib/mysql
     ports:
       - "${DB_PORT_EXTERNAL:-3306}:3306"
     networks:
-      - imageseer-network
+      - motivation-network
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
@@ -73,5 +73,5 @@ volumes:
   db-data:
 
 networks:
-  imageseer-network:
+  motivation-network:
     driver: bridge
