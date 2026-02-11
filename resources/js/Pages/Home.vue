@@ -45,6 +45,7 @@
             <div class="text-center mt-8">
                 <p class="text-gray-500 dark:text-gray-400 text-sm mb-4">A new quote appears every day</p>
                 <a
+                    v-if="isAdmin"
                     href="/quotes/create"
                     class="inline-flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition"
                 >
@@ -59,6 +60,8 @@
 </template>
 
 <script setup>
+import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import DarkModeToggle from '../Components/DarkModeToggle.vue';
 
 defineProps({
@@ -67,4 +70,7 @@ defineProps({
         default: null
     }
 });
+
+const page = usePage();
+const isAdmin = computed(() => page.props.auth?.user?.is_admin);
 </script>
