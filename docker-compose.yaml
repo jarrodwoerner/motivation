@@ -1,0 +1,5 @@
+services:
+  app:
+    image: 'username/image:latest'
+    volumes:
+      - './storage:/var/www/html/storage'
